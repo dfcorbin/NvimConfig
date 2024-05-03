@@ -28,19 +28,13 @@ require('lazy').setup('plugins')
 
 vim.keymap.set('i', 'jk', '<esc>')
 
-local wk = require("which-key")
 local builtin = require('telescope.builtin')
-wk.register(
-    {
-        name = 'Find',
-        f = { builtin.find_files, 'Find Files' },
-        g = { builtin.live_grep, 'Live Grep' },
-        b = { builtin.buffers, 'Find Buffers' },
-        h = { builtin.help_tags, 'Find Help' },
-        t = { '<cmd>Telescope file_browser<cr>', 'File Browser' }
-    },
-    { mode = 'n', prefix = '<Leader>f' }
-)
+
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>ft', '<cmd>Telescope file_browser<cr>')
 
 ------------------------- LSP CONFIG -------------------------
 local cmp = require 'cmp'
@@ -100,7 +94,10 @@ cmp.setup({
         { name = 'luasnip' }, -- For luasnip users.
     }, {
         { name = 'buffer' },
-    })
+    }),
+    completion = {
+        completeopt = 'menu,menuone,noinsert'
+    }
 })
 
 -- Set configuration for specific filetype.
@@ -131,6 +128,13 @@ cmp.setup.cmdline(':', {
     matching = { disallow_symbol_nonprefix_matching = false }
 })
 
+-- If you want insert `(` after select function or method item
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
+
 -- Set up lspconfig.
 require("mason").setup()
 require("mason-lspconfig").setup()
@@ -157,4 +161,5 @@ require("mason-lspconfig").setup_handlers {
         }
     end
 }
+
 ------------------------- LSP CONFIG (END) -------------------------
