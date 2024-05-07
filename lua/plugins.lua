@@ -35,7 +35,7 @@ return {
     },
     {
         "smoka7/hop.nvim",
-        ersion = "*",
+        version = "*",
     },
     {
         "numToStr/Comment.nvim",
